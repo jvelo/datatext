@@ -1,8 +1,9 @@
 {
-  "name": "jerome/paidia",
+  "name": "jvelo/paidia",
   "description": "Childish play, amusement",
   "license": "MPL2",
   "minimum-stability": "dev",
+  "type": "library",
   "authors": [
     {
       "name": "Jérôme Velociter",
