@@ -10,6 +10,7 @@ use Cocur\Slugify\Slugify;
 use Carbon\Carbon;
 use DiffMatchPatch\DiffMatchPatch;
 use Illuminate\Database\Capsule\Manager as DB;
+use mikemccabe\JsonPatch\JsonPatch;
 
 class Page extends Model {
 
@@ -29,6 +30,7 @@ class Page extends Model {
     public function __construct()
     {
         parent::__construct();
+        $this->hintJsonStructure('metadata', '{"title":null, "author": null, "tags" : []}');
         $this->metadata = '{}';
     }
 
@@ -54,6 +56,12 @@ class Page extends Model {
 
         static::creating(function($page)
         {
+            $title = $page->title;
+
+            if (!isset($title)) {
+                throw new \Exception("Cannot create a page without a title");
+            }
+
             $slugify = new Slugify();
             $page->slug = $slugify->slugify($page->title);
             $page->setJsonAttribute('metadata', 'author', UserProvider::getCurrentUserId());
@@ -71,9 +79,8 @@ class Page extends Model {
             $contentPatches = $dmp->patch_make("", $page->content);
             $revision->content_patch = $dmp->patch_toText($contentPatches);
 
-            // Title patch
-            $titlePatches = $dmp->patch_make("", $page->title);
-            $revision->title_patch = $dmp->patch_toText($titlePatches);
+            // Metadata patch
+            $revision->metadata_patch = json_encode(JsonPatch::diff([], json_decode($page->metadata, 1)));
 
             $revision->author = UserProvider::getCurrentUserId();
             $revision->created_at = Carbon::now();
@@ -97,9 +104,10 @@ class Page extends Model {
             $contentPatches = $dmp->patch_make($page->getOriginal('content'), $updatingPage->content);
             $revision->content_patch = $dmp->patch_toText($contentPatches);
 
-            // Title patch
-            $titlePatches = $dmp->patch_make($page->getOriginal('title'), $updatingPage->title);
-            $revision->title_patch = $dmp->patch_toText($titlePatches);
+            // Metadata patch
+            $revision->metadata_patch = json_encode(
+                JsonPatch::diff(json_decode($page->metadata, 1), json_decode($updatingPage->metadata, 1))
+            );
 
             $revision->author = UserProvider::getCurrentUserId();
             $revision->created_at = Carbon::now();

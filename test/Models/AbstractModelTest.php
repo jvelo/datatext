@@ -65,7 +65,7 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
     {
         parent::setUp();
         $this->schema = DB::schema();
-        
+
         $migration = App::make('CreatePageAndObjectTables');
         $migration->down();
         $migration->up();

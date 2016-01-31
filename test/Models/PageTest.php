@@ -9,8 +9,8 @@ class PageTest extends AbstractModelTest {
     public function testCreatePage() {
         $page = new Page;
 
-        $page->title = "My page title";
         $page->content = "My content";
+        $page->setJsonAttribute('metadata', 'title', "My page title");
 
         $page->save();
 
@@ -31,13 +31,15 @@ class PageTest extends AbstractModelTest {
     public function testCreateAndUpdatePage() {
         $page = new Page;
 
-        $page->title = "My page title";
         $page->content = "My content";
+        $page->setJsonAttribute('metadata', 'title', "My page title");
+        $page->setJsonAttribute('metadata', 'tags', ['foo', 'bar']);
 
         $page->save();
 
         $page->content = "I've updated my content";
-        $page->title = "My page title has changed also";
+        $page->setJsonAttribute('metadata', 'title', "My page title has changed also");
+        $page->setJsonAttribute('metadata', 'tags', ['bar', 'fizz']);
         $page->save();
 
         $this->assertEquals(1, Page::count());

@@ -9,6 +9,12 @@
       "email": "jerome@velociter.fr"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mikemccabe/json-patch-php"
+    }
+  ],
   "require": {
     "cocur/slugify": "dev-master",
     "darrylkuhn/dialect": "1.0.*",
@@ -17,6 +23,7 @@
     "illuminate/database": "5.2.*",
     "illuminate/events": "5.2.*",
     "jvelo/eloquent-uuid-key": "0.1.0",
+    "mikemccabe/json-patch-php": "dev-master",
     "monolog/monolog": "1.17.*",
     "psr/log": "1.0.0",
     "ramsey/uuid": "3.1.*",
