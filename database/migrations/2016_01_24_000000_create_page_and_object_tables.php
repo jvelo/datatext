@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePageAndObjectTables extends Migration
 {
@@ -29,8 +31,8 @@ class CreatePageAndObjectTables extends Migration
         DB::statement("CREATE TABLE page_revision (
           page_id uuid REFERENCES page(id),
           revision_id integer NOT NULL,
-          patch text NOT NULL,
-          title text NOT NULL,
+          content_patch text NOT NULL,
+          title_patch text NOT NULL,
           created_at timestamp without time zone NOT NULL,
           author text NOT NULL,
           PRIMARY KEY(page_id, revision_id)
@@ -48,7 +50,7 @@ class CreatePageAndObjectTables extends Migration
           type text,
           PRIMARY KEY(id)
         );");
-        
+
         DB::statement("CREATE INDEX object_data_gin_index ON object USING GIN (data jsonb_path_ops);");
         DB::statement("CREATE INDEX object_type_index ON object USING BTREE (type)");
         DB::statement("CREATE INDEX object_metadata_created_at_index ON object (CAST (metadata->>'created_at' AS integer))");
@@ -61,8 +63,8 @@ class CreatePageAndObjectTables extends Migration
      */
     public function down()
     {
-        Schema::drop('data');
-        Schema::drop('pages');
-        Schema::drop('page_revisions');
+        Schema::dropIfExists('object');
+        Schema::dropIfExists('page_revision');
+        Schema::dropIfExists('page');
     }
 }

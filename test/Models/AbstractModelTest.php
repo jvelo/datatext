@@ -3,6 +3,7 @@
 namespace Jvelo\Paidia\Models;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Facade as Facade;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Schema\Blueprint;
@@ -42,6 +43,9 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
         ]);
 
         $container = new Container;
+        $container->singleton("db", function() use ($capsule) {
+            return $capsule->getDatabaseManager();
+        });
         $container->singleton("paidia.user_provider", '\Jvelo\Paidia\ConstantAdminUserProvider');
 
         Facade::setFacadeApplication($container);
@@ -49,15 +53,22 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
         $capsule->setEventDispatcher(new Dispatcher($container));
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
+
+        $container->bind('CreatePageAndObjectTables', '\CreatePageAndObjectTables');
+        $container->bind('Schema', '\Illuminate\Database\Schema\Builder');
+        $container->singleton('app', function() use ($container) {
+            return $container;
+        });
     }
 
     protected function setUp()
     {
         parent::setUp();
         $this->schema = DB::schema();
-        $this->setUpDatabase();
+        
+        $migration = App::make('CreatePageAndObjectTables');
+        $migration->down();
+        $migration->up();
     }
-
-    abstract protected function setUpDatabase();
 
 }

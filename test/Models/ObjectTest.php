@@ -6,22 +6,6 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class ObjectTest extends AbstractModelTest
 {
-    protected function setUpDatabase()
-    {
-        $this->schema->dropIfExists('object');
-
-        DB::statement("CREATE TABLE object (
-          id uuid,
-          data jsonb,
-          metadata jsonb,
-          type text,
-          PRIMARY KEY(id)
-        );");
-
-        DB::statement("CREATE INDEX object_data_gin_index ON object USING GIN (data jsonb_path_ops);");
-        DB::statement("CREATE INDEX object_type_index ON object USING BTREE (type)");
-        DB::statement("CREATE INDEX object_metadata_created_at_index ON object (CAST (metadata->>'created_at' AS integer))");
-    }
 
     protected function tearDown()
     {
