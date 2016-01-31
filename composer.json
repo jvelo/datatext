@@ -1,0 +1,34 @@
+{
+  "name": "jerome/paidia",
+  "description": "Childish play, amusement",
+  "license": "MPL2",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Jérôme Velociter",
+      "email": "jerome@velociter.fr"
+    }
+  ],
+  "require": {
+    "cocur/slugify": "dev-master",
+    "darrylkuhn/dialect": "1.0.*",
+    "erusev/parsedown": "~1.6",
+    "illuminate/auth": "5.2.x",
+    "illuminate/database": "5.2.*",
+    "illuminate/events": "5.2.*",
+    "jvelo/eloquent-uuid-key": "0.1.0",
+    "monolog/monolog": "1.17.*",
+    "psr/log": "1.0.0",
+    "ramsey/uuid": "3.1.*",
+    "yetanotherape/diff-match-patch": "dev-master",
+    "nesbot/carbon": "1.20"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jvelo\\Paidia\\": "src/"
+    }
+  }
+}
