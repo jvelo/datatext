@@ -9,7 +9,7 @@ use Eloquent\Dialect\Json;
 use Cocur\Slugify\Slugify;
 use Carbon\Carbon;
 use DiffMatchPatch\DiffMatchPatch;
-use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Facades\DB;
 use mikemccabe\JsonPatch\JsonPatch;
 
 class Page extends Model {
