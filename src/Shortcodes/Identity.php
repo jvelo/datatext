@@ -3,7 +3,7 @@
 namespace Jvelo\Paidia\Shortcodes;
 
 
-class Identity implements Shortcode {
+class Identity extends AbstractShortcode {
 
     public function name()
     {
@@ -16,10 +16,5 @@ class Identity implements Shortcode {
             return $shortcode->getContent();
         };
 
-    }
-
-    public function listeners()
-    {
-        return [];
     }
 }
