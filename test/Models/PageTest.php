@@ -56,4 +56,21 @@ class PageTest extends AbstractModelTest {
         $this->assertEquals($fetchedRevision->page_id, $fetchedPage->id, "Page id is preserved");
     }
 
+    public function testSimpleMarkdownConversion() {
+        $page = new Page;
+        $page->content = "## Hello";
+        $this->assertEquals("<h2>Hello</h2>", $page->toArray()['html_content']);
+    }
+
+    public function testTablesHaveTableClass() {
+        $page = new Page;
+        $page->content =  <<< 'MARKDOWN'
+|Tables|Is|
+|------|--|
+|OK    |? |
+MARKDOWN;
+
+        $this->assertEquals("<table>\n<thead>\n<tr>\n<th>Tables</th>\n<th>Is</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>OK</td>\n<td>?</td>\n</tr>\n</tbody>\n</table>", $page->toArray()['html_content']);
+    }
+
 }

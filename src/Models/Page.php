@@ -5,12 +5,14 @@ namespace Jvelo\Paidia\Models;
 use Illuminate\Database\Eloquent\Model;
 use Jvelo\Eloquent\UuidKey;
 use Jvelo\Paidia\Support\UserProvider;
+use Jvelo\Paidia\Markdown\Markdown;
 use Eloquent\Dialect\Json;
 use Cocur\Slugify\Slugify;
 use Carbon\Carbon;
 use DiffMatchPatch\DiffMatchPatch;
 use Illuminate\Support\Facades\DB;
 use mikemccabe\JsonPatch\JsonPatch;
+use Masterminds\HTML5;
 
 class Page extends Model {
 
@@ -23,9 +25,13 @@ class Page extends Model {
 
     public $timestamps = false;
 
+    protected $appends = ['html_content'];
+
     protected $casts = [
         'id' => 'string'
     ];
+
+    protected $fillable = ['title', 'tags', 'content'];
 
     public function __construct()
     {
@@ -33,6 +39,25 @@ class Page extends Model {
         $this->hintJsonStructure('metadata', '{"title":null, "author": null, "tags" : []}');
         $this->metadata = '{}';
     }
+
+     public function getHtmlContentAttribute()
+     {
+         if (!isset($this->parser)) {
+             $this->parser = new Markdown();
+         }
+
+         $html =$this->parser->text($this->attributes['content']);
+
+         //$html5 = new HTML5();
+         //$html5 = new HTML5(['disable_html_ns' => true]);
+         //$dom = $html5->loadHTML($html);
+         //$domTables = $dom->getElementsByTagName("table");
+         //foreach ($domTables as $table) {
+         //    $table->setAttribute('class', 'table');
+         //}
+
+         return $html;
+     }
 
     /**
      * Ensure the save is being done in a transaction so that pages are always consistent with their revisions (saved

@@ -2,6 +2,8 @@
 
 namespace Jvelo\Paidia;
 
+use Illuminate\Support\Facades\Auth;
+
 class LaravelUserProvider implements UserProvider {
 
     public function getCurrentUserId()

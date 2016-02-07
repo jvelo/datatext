@@ -56,6 +56,7 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
 
         $container->bind('CreatePageAndObjectTables', '\CreatePageAndObjectTables');
         $container->bind('Schema', '\Illuminate\Database\Schema\Builder');
+
         $container->singleton('app', function() use ($container) {
             return $container;
         });

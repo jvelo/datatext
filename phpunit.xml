@@ -12,7 +12,7 @@
 
     <testsuites>
         <testsuite name="Paidia tests">
-            <directory>./test/Models</directory>
+            <directory>./test/</directory>
         </testsuite>
     </testsuites>
 
