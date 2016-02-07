@@ -2,7 +2,8 @@
 
 namespace Jvelo\Paidia;
 
-use Log;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
