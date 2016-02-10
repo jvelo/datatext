@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Shortcodes;
+namespace Jvelo\Datatext\Shortcodes;
 
 
 class Identity extends AbstractShortcode {

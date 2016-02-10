@@ -1,5 +1,5 @@
 {
-  "name": "jvelo/paidia",
+  "name": "jvelo/datatext",
   "description": "Childish play, amusement",
   "license": "MPL2",
   "minimum-stability": "dev",
@@ -38,7 +38,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Jvelo\\Paidia\\": "src/"
+      "Jvelo\\Datatext\\": "src/"
     }
   }
 }

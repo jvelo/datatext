@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Shortcodes;
+namespace Jvelo\Datatext\Shortcodes;
 
 use Thunder\Shortcode\EventContainer\EventContainer;
 use Thunder\Shortcode\HandlerContainer\HandlerContainer;

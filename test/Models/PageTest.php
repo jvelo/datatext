@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Models;
+namespace Jvelo\Datatext\Models;
 
 use Illuminate\Database\Capsule\Manager as DB;
 

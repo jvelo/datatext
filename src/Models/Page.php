@@ -1,11 +1,11 @@
 <?php
 
-namespace Jvelo\Paidia\Models;
+namespace Jvelo\Datatext\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Jvelo\Eloquent\UuidKey;
-use Jvelo\Paidia\Support\UserProvider;
-use Jvelo\Paidia\Markdown\Markdown;
+use Jvelo\Datatext\Support\UserProvider;
+use Jvelo\Datatext\Markdown\Markdown;
 use Eloquent\Dialect\Json;
 use Cocur\Slugify\Slugify;
 use Carbon\Carbon;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Models;
+namespace Jvelo\Datatext\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Eloquent\Dialect\Json;

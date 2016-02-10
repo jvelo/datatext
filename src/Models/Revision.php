@@ -1,8 +1,8 @@
 <?php
 
-namespace Jvelo\Paidia\Models;
+namespace Jvelo\Datatext\Models;
 use Illuminate\Database\Eloquent\Model;
-use Jvelo\Paidia\CompositeKey;
+use Jvelo\Datatext\CompositeKey;
 
 class Revision extends Model {
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace Jvelo\Paidia;
+namespace Jvelo\Datatext;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class PaidiaServiceProvider extends ServiceProvider
+class DatatextServiceProvider extends ServiceProvider
 {
     /**
      * Register bindings in the container.
@@ -16,7 +16,7 @@ class PaidiaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Log::info("Registering paidia service provider");
+        Log::info("Registering datatext service provider");
     }
 
     /**
@@ -29,13 +29,13 @@ class PaidiaServiceProvider extends ServiceProvider
     {
         parent::boot($events);
 
-        Log::info("Booting Paidia service");
+        Log::info("Booting Datatext service");
 
         $this->publishes([
             __DIR__.'/../database/migrations/' => database_path('migrations')
         ], 'migrations');
 
-        App::bind("paidia.user_provider", '\Jvelo\Paidia\LaravelUserProvider');
+        App::bind("datatext.user_provider", '\Jvelo\Datatext\LaravelUserProvider');
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Shortcodes;
+namespace Jvelo\Datatext\Shortcodes;
 
 use Monolog\Logger;
 use Monolog\Handler\ErrorLogHandler;

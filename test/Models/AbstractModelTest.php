@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Models;
+namespace Jvelo\Datatext\Models;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\App as App;
@@ -46,7 +46,7 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
         $container->singleton("db", function() use ($capsule) {
             return $capsule->getDatabaseManager();
         });
-        $container->singleton("paidia.user_provider", '\Jvelo\Paidia\ConstantAdminUserProvider');
+        $container->singleton("datatext.user_provider", '\Jvelo\Datatext\ConstantAdminUserProvider');
 
         Facade::setFacadeApplication($container);
 

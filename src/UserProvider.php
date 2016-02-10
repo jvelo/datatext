@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia;
+namespace Jvelo\Datatext;
 
 interface UserProvider {
 

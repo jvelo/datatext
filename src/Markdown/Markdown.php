@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Paidia\Markdown;
+namespace Jvelo\Datatext\Markdown;
 
 use Parsedown;
 use Illuminate\Support\Facades\Log;

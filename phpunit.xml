@@ -11,7 +11,7 @@
          bootstrap="test/bootstrap.php">
 
     <testsuites>
-        <testsuite name="Paidia tests">
+        <testsuite name="Datatext tests">
             <directory>./test/</directory>
         </testsuite>
     </testsuites>
