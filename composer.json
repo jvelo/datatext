@@ -1,6 +1,6 @@
 {
   "name": "jvelo/datatext",
-  "description": "Childish play, amusement",
+  "description": "datatext — a data and text CMS",
   "license": "MPL2",
   "minimum-stability": "dev",
   "type": "library",
