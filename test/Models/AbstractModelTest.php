@@ -47,6 +47,7 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
             return $capsule->getDatabaseManager();
         });
         $container->singleton("datatext.user_provider", '\Jvelo\Datatext\ConstantAdminUserProvider');
+        $container->singleton("datatext.shortcodes", '\Jvelo\Datatext\Shortcodes\Shortcodes');
 
         Facade::setFacadeApplication($container);
 

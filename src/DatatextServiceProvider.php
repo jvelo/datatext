@@ -36,6 +36,7 @@ class DatatextServiceProvider extends ServiceProvider
         ], 'migrations');
 
         App::bind("datatext.user_provider", '\Jvelo\Datatext\LaravelUserProvider');
+        App::bind("datatext.assets_manager", '\Jvelo\Datatext\Assets\DefaultAssets');
+        App::bind("datatext.shortcodes", '\Jvelo\Datatext\Shortcodes\Shortcodes');
     }
-
 }

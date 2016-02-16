@@ -4,6 +4,7 @@ namespace Jvelo\Datatext\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Jvelo\Eloquent\UuidKey;
+use Jvelo\Datatext\Support\Shortcodes;
 use Jvelo\Datatext\Support\UserProvider;
 use Jvelo\Datatext\Markdown\Markdown;
 use Eloquent\Dialect\Json;
@@ -47,6 +48,8 @@ class Page extends Model {
          }
 
          $html =$this->parser->text($this->attributes['content']);
+
+         $html = Shortcodes::process($html);
 
          //$html5 = new HTML5();
          //$html5 = new HTML5(['disable_html_ns' => true]);

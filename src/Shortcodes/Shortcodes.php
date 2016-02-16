@@ -9,7 +9,6 @@ use Thunder\Shortcode\Processor\Processor;
 
 class Shortcodes
 {
-
     private $handlers;
 
     private $events;
@@ -35,7 +34,8 @@ class Shortcodes
         $this->processor = $this->processor->withEventContainer($this->events);
     }
 
-    function process($text) {
+    function process($text)
+    {
         return $this->processor->process($text);
     }
 }

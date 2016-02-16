@@ -3,6 +3,8 @@
 namespace Jvelo\Datatext\Models;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use Jvelo\Datatext\Support\Shortcodes;
+use Jvelo\Datatext\Shortcodes\Identity;
 
 class PageTest extends AbstractModelTest {
 
@@ -69,6 +71,16 @@ class PageTest extends AbstractModelTest {
 MARKDOWN;
 
         $this->assertEquals("<h1>Yes</h1>", $page->toArray()['html_content']);
+    }
+
+    public function testShortCodesAreRendered() {
+        Shortcodes::register(new Identity);
+        $page = new Page;
+        $page->content =  <<< 'MARKDOWN'
+[identity]hello[/identity]
+MARKDOWN;
+
+        $this->assertEquals("<p>hello</p>", $page->toArray()['html_content']);
     }
 
 }
