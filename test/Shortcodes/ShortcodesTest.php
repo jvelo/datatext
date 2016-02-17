@@ -4,6 +4,27 @@ namespace Jvelo\Datatext\Shortcodes;
 
 use Monolog\Logger;
 use Monolog\Handler\ErrorLogHandler;
+use Thunder\Shortcode\Shortcode\ShortcodeInterface;
+
+class ShortcodeTest implements Shortcode {
+
+    public function name()
+    {
+        return "test-shortcode";
+    }
+
+    public function handler()
+    {
+        return function(ShortcodeInterface $shortcode) {
+            return "hello, " . $shortcode->getParameter('name');
+        };
+    }
+
+    public function listeners()
+    {
+        return [];
+    }
+}
 
 class ShortcodesTests extends \PHPUnit_Framework_TestCase {
 
@@ -35,5 +56,10 @@ class ShortcodesTests extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("[identity]toto[/identity]", $this->shortcodes->process("[verbatim][identity]toto[/identity][/verbatim]"));
     }
 
+    public function testShortCodeWithArgument() {
+        $this->logger->info("testShortCodeWithArgument ...");
+        $this->shortcodes->register(new ShortcodeTest);
+        $this->assertEquals("hello, world", $this->shortcodes->process("[test-shortcode name=\"world\"]"));
+    }
 
 }
