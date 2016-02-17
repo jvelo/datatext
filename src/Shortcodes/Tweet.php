@@ -3,6 +3,8 @@
 namespace Jvelo\Datatext\Shortcodes;
 
 use Jvelo\Datatext\Support\Assets;
+use Jvelo\Datatext\Assets\Asset;
+use Log;
 
 class Tweet implements Shortcode {
 
@@ -14,7 +16,7 @@ class Tweet implements Shortcode {
     public function handler()
     {
         return function($shortcode) {
-            $id = $shortcode->getParameter('name');
+            $id = $shortcode->getParameter('id');
             $theme = $shortcode->getParameter('theme') || 'dark';
 
             Assets::request(new Asset('script', '//platform.twitter.com/widgets.js', [
@@ -22,11 +24,11 @@ class Tweet implements Shortcode {
             ]));
 
             $script = <<< 'SCRIPT'
-            <script type='text/javascript'>
-                twttr.widgets.createTweet(%s, document.getElementById('tweet-%s'), { theme: '%s');
-            </script>
+<script type='text/javascript'>
+  twttr.widgets.createTweet('%s', document.getElementById('tweet-%s'), { theme: '%s'});
+</script>
 SCRIPT;
-            return sprintf('<div id="tweet-%s"></div>' . $script, $id, $id, $id, $theme);
+            return sprintf("<div id=\"tweet-%s\"></div>\n" . $script, $id, $id, $id, $theme);
         };
     }
 

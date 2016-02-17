@@ -47,9 +47,9 @@ class Page extends Model {
              $this->parser = new Markdown();
          }
 
-         $html =$this->parser->text($this->attributes['content']);
+         $html = Shortcodes::process($this->attributes['content']);
 
-         $html = Shortcodes::process($html);
+         $html =$this->parser->text($html);
 
          //$html5 = new HTML5();
          //$html5 = new HTML5(['disable_html_ns' => true]);
