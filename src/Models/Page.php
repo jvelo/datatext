@@ -48,16 +48,7 @@ class Page extends Model {
          }
 
          $html = Shortcodes::process($this->attributes['content']);
-
          $html =$this->parser->text($html);
-
-         //$html5 = new HTML5();
-         //$html5 = new HTML5(['disable_html_ns' => true]);
-         //$dom = $html5->loadHTML($html);
-         //$domTables = $dom->getElementsByTagName("table");
-         //foreach ($domTables as $table) {
-         //    $table->setAttribute('class', 'table');
-         //}
 
          return $html;
      }
@@ -84,14 +75,6 @@ class Page extends Model {
 
         static::creating(function($page)
         {
-            $title = $page->title;
-
-            if (!isset($title)) {
-                throw new \Exception("Cannot create a page without a title");
-            }
-
-            $slugify = new Slugify();
-            $page->slug = $slugify->slugify($page->title);
             $page->setJsonAttribute('metadata', 'author', UserProvider::getCurrentUserId());
         });
 

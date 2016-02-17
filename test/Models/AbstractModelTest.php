@@ -34,7 +34,7 @@ abstract class AbstractModelTest extends \PHPUnit_Framework_TestCase {
         $capsule->addConnection([
             'driver' => 'pgsql',
             'host' => 'localhost',
-            'database' => 'datoum',
+            'database' => 'datatext',
             'username' => 'jerome',
             'password' => '',
             'charset' => 'utf8',

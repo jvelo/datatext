@@ -17,7 +17,6 @@ class CreatePageAndObjectTables extends Migration
 
         DB::statement("CREATE TABLE page (
           id uuid,
-          slug text NOT NULL,
           content text NOT NULL,
           metadata jsonb NOT NULL,
           PRIMARY KEY(id)
