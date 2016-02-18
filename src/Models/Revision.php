@@ -2,7 +2,7 @@
 
 namespace Jvelo\Datatext\Models;
 use Illuminate\Database\Eloquent\Model;
-use Jvelo\Datatext\CompositeKey;
+use Jvelo\Datatext\Database\CompositeKey;
 
 class Revision extends Model {
 

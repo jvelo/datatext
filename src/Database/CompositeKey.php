@@ -1,6 +1,6 @@
 <?php
 
-namespace Jvelo\Datatext;
+namespace Jvelo\Datatext\Database;
 
 use Illuminate\Database\Eloquent\Builder;
 

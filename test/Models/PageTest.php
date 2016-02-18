@@ -5,8 +5,9 @@ namespace Jvelo\Datatext\Models;
 use Illuminate\Database\Capsule\Manager as DB;
 use Jvelo\Datatext\Support\Shortcodes;
 use Jvelo\Datatext\Shortcodes\Identity;
+use Jvelo\Datatext\Database\AbstractDatabaseTest;
 
-class PageTest extends AbstractModelTest {
+class PageTest extends AbstractDatabaseTest {
 
     public function testCreatePage() {
         $page = new Page;

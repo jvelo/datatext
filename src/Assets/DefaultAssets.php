@@ -8,7 +8,7 @@ class DefaultAssets implements Assets {
 
     public function request(Asset $asset)
     {
-        $list[]= $asset;
+        $this->list[]= $asset;
     }
 
     public function all()

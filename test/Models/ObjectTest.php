@@ -3,8 +3,9 @@
 namespace Jvelo\Datatext\Models;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use Jvelo\Datatext\Database\AbstractDatabaseTest;
 
-class ObjectTest extends AbstractModelTest
+class ObjectTest extends AbstractDatabaseTest
 {
 
     protected function tearDown()

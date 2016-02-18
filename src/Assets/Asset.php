@@ -39,13 +39,19 @@ class Asset implements \JsonSerializable {
     }
 
     /**
-     * Returns the value represented by this object.
-     *
-     * @return string
+     * @return string the type of asset
      */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string the location of the asset
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**
