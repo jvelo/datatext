@@ -2,6 +2,7 @@
 
 namespace Jvelo\Datatext\Api;
 
+use Jvelo\Datatext\Support\Api\Pages;
 use Jvelo\Datatext\Models\Page;
 use Jvelo\Datatext\Database\AbstractDatabaseTest;
 use Jvelo\Datatext\Shortcodes\Tweet;
@@ -9,7 +10,8 @@ use Jvelo\Datatext\Support\Shortcodes;
 use Jvelo\Datatext\Support\Assets;
 
 /**
- * Class PagesTest
+ * Test for pages API
+ *
  * @package Jvelo\Datatext\Api
  *
  * @group api
@@ -27,13 +29,16 @@ class PagesTest extends AbstractDatabaseTest {
 
         $this->assertEquals(1, count(Assets::all()));
 
-        $first = Assets::all()[0];
-        $this->assertEquals('script', $first->getType());
-        $this->assertEquals('//platform.twitter.com/widgets.js', $first->getLocation());
+        $asset = Assets::all()[0];
+        $this->assertEquals('script', $asset->getType());
+        $this->assertEquals('//platform.twitter.com/widgets.js', $asset->getLocation());
 
         $page = new Page;
         $page->content = '# datatext';
         $page->save();
+
+        $fetched = Pages::getPage($page->id);
+        $this->assertEquals('<h1>datatext</h1>', $fetched['page']['html_content']);
     }
 
 }

@@ -36,6 +36,7 @@ $container->singleton("db", function() use ($capsule) {
 $container->singleton("datatext.user_provider", '\Jvelo\Datatext\ConstantAdminUserProvider');
 $container->singleton("datatext.shortcodes", '\Jvelo\Datatext\Shortcodes\Shortcodes');
 $container->singleton("datatext.assets_manager", '\Jvelo\Datatext\Assets\DefaultAssets');
+$container->singleton("datatext.api.pages", '\Jvelo\Datatext\Api\Pages');
 
 Facade::setFacadeApplication($container);
 
