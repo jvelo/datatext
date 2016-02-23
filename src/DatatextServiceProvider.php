@@ -38,5 +38,6 @@ class DatatextServiceProvider extends ServiceProvider
         App::bind("datatext.user_provider", '\Jvelo\Datatext\LaravelUserProvider');
         App::bind("datatext.assets_manager", '\Jvelo\Datatext\Assets\DefaultAssets');
         App::bind("datatext.shortcodes", '\Jvelo\Datatext\Shortcodes\Shortcodes');
+        App::bind("datatext.api.pages", '\Jvelo\Datatext\Api\Pages');
     }
 }
