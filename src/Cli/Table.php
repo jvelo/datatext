@@ -44,12 +44,24 @@ class Table {
     }
 
     public function render($options = []) {
+        $columnOffset = 0;
+        if (array_key_exists('columnOffset', $options)) {
+            if (!is_numeric($options['columnOffset'])) {
+                throw new \InvalidArgumentException('Invalid column offset. Not an number');
+            }
+            $columnOffset = $options['columnOffset'];
+        }
+
         if (!is_null($this->headers)) {
-            $this->renderHeaders();
+            $this->renderHeaders($columnOffset);
         }
 
         foreach ($this->rows as $row) {
-            for ($i=0; $i < $this->numberOfColumns; $i++) {
+            if ($columnOffset > 0) {
+                echo '◀ |';
+            }
+
+            for ($i=$columnOffset; $i < $this->numberOfColumns; $i++) {
                 $this->outputCell($row, $i);
             }
             echo PHP_EOL;
@@ -72,15 +84,21 @@ class Table {
         }
     }
 
-    private function renderHeaders()
+    private function renderHeaders($columnOffset)
     {
-        for ($i = 0; $i < $this->numberOfColumns; $i++) {
+        if ($columnOffset > 0) {
+            echo '◀ |';
+        }
+        for ($i = $columnOffset; $i < $this->numberOfColumns; $i++) {
             if (array_key_exists($i, $this->headers)) {
                 $this->outputCell($this->headers, $i);
             }
         }
         echo PHP_EOL;
-        for ($i = 0; $i < $this->numberOfColumns; $i++) {
+        if ($columnOffset > 0) {
+            echo '--+';
+        }
+        for ($i = $columnOffset; $i < $this->numberOfColumns; $i++) {
             if ($i > 0) {
                 echo '-';
             }

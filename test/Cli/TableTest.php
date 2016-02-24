@@ -80,4 +80,22 @@ EXPECTED;
         $headers = -1;
         new Table($rows, ['headers' => $headers]);
     }
+
+    public function testRenderTableWithLeftOffset() {
+        $rows = [
+            ['Wolverine', 'Healing'],
+            ['Dream Girl', 'Clairvoyance']
+        ];
+        $headers = ['Name', 'Power'];
+        $table = new Table($rows, ['headers' => $headers]);
+        $table->render(['columnOffset' => 1]);
+        $expected = <<< EXPECTED
+◀ | Power\x20\x20\x20\x20\x20\x20\x20
+--+-------------
+◀ | Healing\x20\x20\x20\x20\x20
+◀ | Clairvoyance
+
+EXPECTED;
+        $this->expectOutputString($expected);
+    }
 }
