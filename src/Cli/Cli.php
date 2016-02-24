@@ -29,14 +29,14 @@ class Cli {
             if ($line === 'fake') {
                 $rows = [];
                 $size = Window::getSize();
-                for ($i=0; $i < $size['y'] - 2; $i++) {
+                for ($i=0; $i < $size['y'] - 4; $i++) {
                     $row = [];
                     for ($j=0; $j < 5; $j++) {
                         $row[]= $this->faker->name;
                     }
                     $rows[]= $row;
                 }
-                $table = new Table($rows);
+                $table = new Table($rows, ['headers' => ['a', 'b', 'c', 'd', 'e']]);
                 $table->render();
             }
 
