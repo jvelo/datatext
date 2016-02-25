@@ -1,11 +1,11 @@
 <?php
 
-namespace Jvelo\Datatext\Cli;
+namespace Jvelo\Datatext\Cli\Tables;
 
 /**
  * Test for the CLI table formatter
  *
- * @package Jvelo\Datatext\Cli
+ * @package Jvelo\Datatext\Cli\Tables
  * @group cli
  *
  */

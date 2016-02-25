@@ -6,6 +6,7 @@ use Hoa\Console\Readline\Readline;
 use Hoa\Console\Cursor;
 use Hoa\Console\Window;
 use Faker\Factory;
+use Jvelo\Datatext\Cli\Tables\Table;
 
 class Cli {
 

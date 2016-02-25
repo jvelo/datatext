@@ -1,11 +1,11 @@
 <?php
 
-namespace Jvelo\Datatext\Cli;
+namespace Jvelo\Datatext\Cli\Tables;
 
 /**
  * Table to be render in the cli
  *
- * @package Jvelo\Datatext\Cli
+ * @package Jvelo\Datatext\Cli\Tables
  */
 class Table {
 
@@ -109,7 +109,7 @@ class Table {
     }
 
     /**
-     * @param $offset the offset to get column for
+     * @param integer $offset the offset to get column for
      * @return array the columns to render, including sticky columns, starting at offset
      */
     private function getColumnsForOffset($offset) {
