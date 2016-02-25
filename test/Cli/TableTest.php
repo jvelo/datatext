@@ -98,4 +98,30 @@ EXPECTED;
 EXPECTED;
         $this->expectOutputString($expected);
     }
+
+    /**
+     * @group failing
+     */
+    public function testRenderTableWithStickyColumn() {
+        $rows = [
+            ['Peter', 'Dustin Hoffman', 'Jean-Claude Montalban'],
+            ['Steven', 'Robert Redford', 'Patrick Guillemin'],
+            ['Dave', 'Paul Newman', 'Patrick Guillemin']
+        ];
+        $headers = ['Character', 'Actor', 'Voice'];
+        $table = new Table($rows, [
+            'headers' => $headers,
+            'stickyColumns' => [ 0 ]
+        ]);
+        $table->render(['columnOffset' => 2]);
+        $expected = <<< EXPECTED
+◀ | Character | Voice\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+--+-----------+----------------------
+◀ | Peter     | Jean-Claude Montalban
+◀ | Steven    | Patrick Guillemin\x20\x20\x20\x20
+◀ | Dave      | Patrick Guillemin\x20\x20\x20\x20
+
+EXPECTED;
+        $this->expectOutputString($expected);
+    }
 }

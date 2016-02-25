@@ -2,6 +2,11 @@
 
 namespace Jvelo\Datatext\Cli;
 
+/**
+ * Table to be render in the cli
+ *
+ * @package Jvelo\Datatext\Cli
+ */
 class Table {
 
     private $rows;
@@ -14,6 +19,13 @@ class Table {
 
     private $headers = NULL;
 
+    private $stickyColumns = [];
+
+    /**
+     * @param array $rows the table rows.
+     * @param array $options the table options. Valid keys :
+     *                       - ```headers``` an array with the table headers
+     */
     function __construct($rows, $options = [])
     {
         if (!is_array($rows)) {
@@ -30,6 +42,18 @@ class Table {
             $this->headers = $this->options['headers'];
         }
 
+        if (array_key_exists('stickyColumns', $this->options)) {
+            if (is_numeric($this->options['stickyColumns'])) {
+                $this->stickyColumns = [ $this->options['stickyColumns'] ];
+            }
+            else if (is_array($this->options['stickyColumns'])) {
+                $this->stickyColumns = $this->options['stickyColumns'];
+            }
+            else {
+                throw new \InvalidArgumentException('Invalid sticky columns definition. Not an array or single numeric value');
+            }
+        }
+
         $this->numberOfColumns = array_reduce($this->rows, function($max, $row) {
             return max(count($row), $max);
         }, 0);
@@ -43,6 +67,12 @@ class Table {
         }
     }
 
+    /**
+     * Main API, renders the table to screen
+     *
+     * @param array $options the rendering options. Valid keys :
+     *                       - ```columnOffset``` the column offset to start rendering at
+     */
     public function render($options = []) {
         $columnOffset = 0;
         if (array_key_exists('columnOffset', $options)) {
@@ -52,31 +82,65 @@ class Table {
             $columnOffset = $options['columnOffset'];
         }
 
+        $columns = $this->getColumnsForOffset($columnOffset);
+
+        if (count($columns) === 0) {
+            echo PHP_EOL;
+            return;
+        }
+
         if (!is_null($this->headers)) {
-            $this->renderHeaders($columnOffset);
+            $this->renderHeaders($columnOffset, $columns);
         }
 
         foreach ($this->rows as $row) {
-            if ($columnOffset > 0) {
+            if ($this->hasMoreRowsOnLeft($columnOffset)) {
                 echo '◀ |';
             }
 
-            for ($i=$columnOffset; $i < $this->numberOfColumns; $i++) {
-                $this->outputCell($row, $i);
+            foreach ($columns as $index) {
+                if ($index > 0 || $this->hasMoreRowsOnLeft($columnOffset)) {
+                    echo ' ';
+                }
+                $this->renderCell($row, $index);
             }
             echo PHP_EOL;
         }
     }
 
     /**
-     * @param $row
-     * @param $index
+     * @param $offset the offset to get column for
+     * @return array the columns to render, including sticky columns, starting at offset
      */
-    private function outputCell($row, $index)
-    {
-        if ($index > 0) {
-            echo ' ';
+    private function getColumnsForOffset($offset) {
+        $columns = $this->stickyColumns;
+        for ($i=$offset; $i < $this->numberOfColumns; $i++) {
+            if (!in_array($i, $columns)) {
+                $columns[]= $i;
+            }
         }
+
+        return $columns;
+    }
+
+    /**
+     * @param integer $offset the column offset for considered
+     * @return boolean whether or not rendering this table would have more rows available on the left side
+     */
+    private function hasMoreRowsOnLeft($offset) {
+        return $offset > 0 && array_reduce($this->stickyColumns, function($carry, $item) use ($offset) {
+            return $carry && $item < $offset;
+        }, true);
+    }
+
+    /**
+     * Renders a cell from a row
+     *
+     * @param array $row the row the cell is in
+     * @param integer $index the index of the cell in the rowrow
+     */
+    private function renderCell($row, $index)
+    {
         echo $row[$index];
         echo str_repeat(' ', ($this->columnSizes[$index] - mb_strwidth($row[$index])));
         if ($index < $this->numberOfColumns - 1) {
@@ -84,22 +148,31 @@ class Table {
         }
     }
 
-    private function renderHeaders($columnOffset)
+    /**
+     * Render the table headers
+     *
+     * @param integer $offset the offset headers are requested to render at
+     * @param array $columns an array of header column indexes to render
+     */
+    private function renderHeaders($offset, $columns)
     {
-        if ($columnOffset > 0) {
+        if ($this->hasMoreRowsOnLeft($offset) > 0) {
             echo '◀ |';
         }
-        for ($i = $columnOffset; $i < $this->numberOfColumns; $i++) {
+        foreach($columns as $i) {
             if (array_key_exists($i, $this->headers)) {
-                $this->outputCell($this->headers, $i);
+                if ($i > 0 || $this->hasMoreRowsOnLeft($offset)) {
+                    echo ' ';
+                }
+                $this->renderCell($this->headers, $i);
             }
         }
         echo PHP_EOL;
-        if ($columnOffset > 0) {
+        if ($this->hasMoreRowsOnLeft($offset) > 0) {
             echo '--+';
         }
-        for ($i = $columnOffset; $i < $this->numberOfColumns; $i++) {
-            if ($i > 0) {
+        foreach($columns as $i) {
+            if ($i > 0 || $this->hasMoreRowsOnLeft($offset)) {
                 echo '-';
             }
             echo str_repeat('-', $this->columnSizes[$i] + ($i < $this->numberOfColumns - 1 ? 1 : 0));
