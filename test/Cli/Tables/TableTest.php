@@ -90,10 +90,10 @@ EXPECTED;
         $table = new Table($rows, ['headers' => $headers]);
         $table->render(['columnOffset' => 1]);
         $expected = <<< EXPECTED
-◀ | Power\x20\x20\x20\x20\x20\x20\x20
---+-------------
-◀ | Healing\x20\x20\x20\x20\x20
-◀ | Clairvoyance
+◀ Power\x20\x20\x20\x20\x20\x20\x20
+◀ -------------
+◀ Healing\x20\x20\x20\x20\x20
+◀ Clairvoyance
 
 EXPECTED;
         $this->expectOutputString($expected);
@@ -115,11 +115,11 @@ EXPECTED;
         ]);
         $table->render(['columnOffset' => 2]);
         $expected = <<< EXPECTED
-◀ | Character | Voice\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
---+-----------+----------------------
-◀ | Peter     | Jean-Claude Montalban
-◀ | Steven    | Patrick Guillemin\x20\x20\x20\x20
-◀ | Dave      | Patrick Guillemin\x20\x20\x20\x20
+◀ Character | Voice\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+◀ ----------+----------------------
+◀ Peter     | Jean-Claude Montalban
+◀ Steven    | Patrick Guillemin\x20\x20\x20\x20
+◀ Dave      | Patrick Guillemin\x20\x20\x20\x20
 
 EXPECTED;
         $this->expectOutputString($expected);

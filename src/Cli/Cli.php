@@ -7,9 +7,10 @@ use Hoa\Console\Cursor;
 use Hoa\Console\Window;
 use Faker\Factory;
 use Jvelo\Datatext\Cli\Tables\Table;
+use Jvelo\Datatext\Cli\Tables\NavigableTable;
 
-class Cli {
-
+class Cli
+{
     private $readline;
     private $faker;
 
@@ -19,7 +20,8 @@ class Cli {
         $this->faker = Factory::create();
     }
 
-    public function listen() {
+    public function listen()
+    {
         Cursor::setStyle('▋', true);
         do {
             Cursor::colorize('b fg(yellow) bg(blue)');
@@ -30,18 +32,17 @@ class Cli {
             if ($line === 'fake') {
                 $rows = [];
                 $size = Window::getSize();
-                for ($i=0; $i < $size['y'] - 4; $i++) {
+                for ($i = 0; $i < $size['y'] - 4; $i++) {
                     $row = [];
-                    for ($j=0; $j < 5; $j++) {
-                        $row[]= $this->faker->name;
+                    for ($j = 0; $j < 5; $j++) {
+                        $row[] = $this->faker->name;
                     }
-                    $rows[]= $row;
+                    $rows[] = $row;
                 }
                 $table = new Table($rows, ['headers' => ['a', 'b', 'c', 'd', 'e']]);
-                $table->render();
-            }
-
-            else {
+                $navigable = new NavigableTable($table);
+                $navigable->render();
+            } else {
                 echo '< ', $line, "\n";
             }
 

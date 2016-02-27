@@ -95,7 +95,7 @@ class Table {
 
         foreach ($this->rows as $row) {
             if ($this->hasMoreRowsOnLeft($columnOffset)) {
-                echo '◀ |';
+                echo '◀';
             }
 
             foreach ($columns as $index) {
@@ -106,6 +106,11 @@ class Table {
             }
             echo PHP_EOL;
         }
+    }
+
+    public function getNumberOfColumns()
+    {
+        return $this->numberOfColumns;
     }
 
     /**
@@ -157,7 +162,7 @@ class Table {
     private function renderHeaders($offset, $columns)
     {
         if ($this->hasMoreRowsOnLeft($offset) > 0) {
-            echo '◀ |';
+            echo '◀';
         }
         foreach($columns as $i) {
             if (array_key_exists($i, $this->headers)) {
@@ -169,10 +174,10 @@ class Table {
         }
         echo PHP_EOL;
         if ($this->hasMoreRowsOnLeft($offset) > 0) {
-            echo '--+';
+            echo '◀ ';
         }
         foreach($columns as $i) {
-            if ($i > 0 || $this->hasMoreRowsOnLeft($offset)) {
+            if ($i > 0) {
                 echo '-';
             }
             echo str_repeat('-', $this->columnSizes[$i] + ($i < $this->numberOfColumns - 1 ? 1 : 0));
