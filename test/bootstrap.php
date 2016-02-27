@@ -22,7 +22,7 @@ $capsule->addConnection([
     'driver' => 'pgsql',
     'host' => 'localhost',
     'database' => 'datatext',
-    'username' => 'jerome',
+    'username' => 'postgres',
     'password' => '',
     'charset' => 'utf8',
     'prefix' => '',
