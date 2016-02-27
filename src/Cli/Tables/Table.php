@@ -9,6 +9,10 @@ namespace Jvelo\Datatext\Cli\Tables;
  */
 class Table {
 
+    private $moreLeftRowsSymbol = '◀';
+
+    private $moreRightRowsSymbol = '▶';
+
     private $rows;
 
     private $numberOfColumns;
@@ -35,24 +39,7 @@ class Table {
         $this->rows = $rows;
         $this->options = $options;
 
-        if (array_key_exists('headers', $this->options)) {
-            if (!is_array($this->options['headers'])) {
-                throw new \InvalidArgumentException('Invalid headers. Not an array');
-            }
-            $this->headers = $this->options['headers'];
-        }
-
-        if (array_key_exists('stickyColumns', $this->options)) {
-            if (is_numeric($this->options['stickyColumns'])) {
-                $this->stickyColumns = [ $this->options['stickyColumns'] ];
-            }
-            else if (is_array($this->options['stickyColumns'])) {
-                $this->stickyColumns = $this->options['stickyColumns'];
-            }
-            else {
-                throw new \InvalidArgumentException('Invalid sticky columns definition. Not an array or single numeric value');
-            }
-        }
+        $this->processOptions();
 
         $this->numberOfColumns = array_reduce($this->rows, function($max, $row) {
             return max(count($row), $max);
@@ -95,7 +82,7 @@ class Table {
 
         foreach ($this->rows as $row) {
             if ($this->hasMoreRowsOnLeft($columnOffset)) {
-                echo '◀';
+                echo $this->moreLeftRowsSymbol;
             }
 
             foreach ($columns as $index) {
@@ -162,7 +149,7 @@ class Table {
     private function renderHeaders($offset, $columns)
     {
         if ($this->hasMoreRowsOnLeft($offset) > 0) {
-            echo '◀';
+            echo $this->moreLeftRowsSymbol;
         }
         foreach($columns as $i) {
             if (array_key_exists($i, $this->headers)) {
@@ -174,7 +161,7 @@ class Table {
         }
         echo PHP_EOL;
         if ($this->hasMoreRowsOnLeft($offset) > 0) {
-            echo '◀ ';
+            echo "$this->moreLeftRowsSymbol ";
         }
         foreach($columns as $i) {
             if ($i > 0) {
@@ -186,5 +173,47 @@ class Table {
             }
         }
         echo PHP_EOL;
+    }
+
+    /**
+     * Unpack the options array in the private variables of this class.
+     */
+    private function processOptions()
+    {
+        if (array_key_exists('headers', $this->options)) {
+            if (!is_array($this->options['headers'])) {
+                throw new \InvalidArgumentException('Invalid headers. Not an array');
+            }
+            $this->headers = $this->options['headers'];
+        }
+
+        if (array_key_exists('stickyColumns', $this->options)) {
+            if (is_numeric($this->options['stickyColumns'])) {
+                $this->stickyColumns = [$this->options['stickyColumns']];
+            } else if (is_array($this->options['stickyColumns'])) {
+                $this->stickyColumns = $this->options['stickyColumns'];
+            } else {
+                throw new \InvalidArgumentException('Invalid sticky columns definition. Not an array or single numeric value');
+            }
+        }
+
+        if (array_key_exists('symbols', $this->options)) {
+            if (!is_array($this->options['symbols'])) {
+                throw new \InvalidArgumentException('Invalid symbols option. Not an array');
+            }
+            $symbols = $this->options['symbols'];
+            if (array_key_exists('moreLeftRows', $symbols)) {
+                if (!is_string($symbols['moreLeftRows'])) {
+                    throw new \InvalidArgumentException('Invalid moreLeftRows symbol. Not a string');
+                }
+                $this->moreLeftRowsSymbol = $symbols['moreLeftRows'];
+            }
+            if (array_key_exists('moreRightRows', $symbols)) {
+                if (!is_string($symbols['moreRightRows'])) {
+                    throw new \InvalidArgumentException('Invalid moreRightRows symbol. Not a string');
+                }
+                $this->moreRightRowsSymbol = $symbols['moreRightRows'];
+            }
+        }
     }
 }

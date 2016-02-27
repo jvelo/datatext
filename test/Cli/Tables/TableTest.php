@@ -99,6 +99,29 @@ EXPECTED;
         $this->expectOutputString($expected);
     }
 
+    public function testRenderTableWithLeftOffsetAndCustomMoreLeftRowsSymbol() {
+        $rows = [
+            ['Wolverine', 'Healing'],
+            ['Dream Girl', 'Clairvoyance']
+        ];
+        $headers = ['Name', 'Power'];
+        $table = new Table($rows, [
+            'headers' => $headers,
+            'symbols' => [
+                'moreLeftRows' => '<'
+            ]
+        ]);
+        $table->render(['columnOffset' => 1]);
+        $expected = <<< EXPECTED
+< Power\x20\x20\x20\x20\x20\x20\x20
+< -------------
+< Healing\x20\x20\x20\x20\x20
+< Clairvoyance
+
+EXPECTED;
+        $this->expectOutputString($expected);
+    }
+
     /**
      * @group failing
      */
