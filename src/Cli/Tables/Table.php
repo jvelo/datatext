@@ -194,15 +194,17 @@ class Table {
             }
         }
         echo PHP_EOL;
-        if ($this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset()) > 0) {
-            echo "$this->moreLeftRowsSymbol ";
-        }
         $offsetX = 0;
+        if ($this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset())) {
+            echo "$this->moreLeftRowsSymbol ";
+            $offsetX += 2;
+        }
+        $firstColumnRendered = false;
         foreach($columns as $i) {
             if ($offsetX >= $renderingOptions->getScreenEstate()['x']) {
                 continue;
             }
-            if ($i > 0) {
+            if ($firstColumnRendered) {
                 echo '-';
                 $offsetX += 1;
             }
@@ -220,6 +222,7 @@ class Table {
                 echo " $this->moreRightRowsSymbol";
                 $offsetX += 2;
             }
+            $firstColumnRendered = true;
         }
         echo PHP_EOL;
     }

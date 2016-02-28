@@ -46,7 +46,10 @@ class Cli
                     }
                     $rows[] = $row;
                 }
-                $table = new Table($rows, ['headers' => ['a', 'b', 'c', 'd', 'e']]);
+                $table = new Table($rows, [
+                    'headers' => ['a', 'b', 'c', 'd', 'e'],
+                    'stickyColumns' => [2]
+                ]);
                 $navigable = new NavigableTable($table);
                 $navigable->render();
             } else {
