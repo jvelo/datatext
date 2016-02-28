@@ -152,4 +152,26 @@ EXPECTED;
         $this->expectOutputString($expected);
     }
 
+    public function testRenderTableLargerThanScreenEstate() {
+        $rows = [
+            ['TY', 'KT Rolster', 'Terran'],
+            ['Maru', 'Jin Air Green Wings', 'Terran']
+        ];
+        $headers = ['Player', 'Team', 'Race'];
+        $table = new Table($rows, [ 'headers' => $headers ]);
+        $table->render(['screenEstate' => [
+            'x' => 13
+        ]]);
+        $expected = <<< EXPECTED
+Player | Te ▶
+-------+--- ▶
+TY     | KT ▶
+Maru   | Ji ▶
+
+EXPECTED;
+
+        $this->assertEquals(str_split($expected), str_split($this->getActualOutput()));
+        $this->expectOutputString($expected);
+    }
+
 }

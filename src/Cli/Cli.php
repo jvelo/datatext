@@ -41,7 +41,7 @@ class Cli
                 $size = Window::getSize();
                 for ($i = 0; $i < $size['y'] - 4; $i++) {
                     $row = [];
-                    for ($j = 0; $j < 5; $j++) {
+                    for ($j = 0; $j < 10; $j++) {
                         $row[] = $this->faker->name;
                     }
                     $rows[] = $row;

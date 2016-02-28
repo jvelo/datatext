@@ -68,15 +68,10 @@ class Table {
      *                       - ```columnOffset``` the column offset to start rendering at
      */
     public function render($options = []) {
-        $columnOffset = 0;
-        if (array_key_exists('columnOffset', $options)) {
-            if (!is_numeric($options['columnOffset'])) {
-                throw new \InvalidArgumentException('Invalid column offset. Not an number');
-            }
-            $columnOffset = $options['columnOffset'];
-        }
 
-        $columns = $this->getColumnsForOffset($columnOffset);
+        $renderingOptions = new RenderingOptions($options);
+
+        $columns = $this->getColumnsForOffset($renderingOptions->getColumnOffset());
 
         if (count($columns) === 0) {
             echo PHP_EOL;
@@ -84,19 +79,23 @@ class Table {
         }
 
         if (!is_null($this->headers)) {
-            $this->renderHeaders($columnOffset, $columns);
+            $this->renderHeaders($columns, $renderingOptions);
         }
 
         foreach ($this->rows as $row) {
-            if ($this->hasMoreRowsOnLeft($columnOffset)) {
+            $offsetX = 0;
+            if ($this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset())) {
                 echo $this->moreLeftRowsSymbol;
+                $offsetX += 1;
             }
 
             foreach ($columns as $index) {
-                if ($index > 0 || $this->hasMoreRowsOnLeft($columnOffset)) {
+                if (($index > 0 || $this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset()))
+                    && $offsetX < $renderingOptions->getScreenEstate()['x']) {
                     echo ' ';
+                    $offsetX += 1;
                 }
-                $this->renderCell($row, $index);
+                $offsetX += $this->renderCell($row, $index, $renderingOptions, $offsetX);
             }
             echo PHP_EOL;
         }
@@ -136,47 +135,90 @@ class Table {
      * Renders a cell from a row
      *
      * @param array $row the row the cell is in
-     * @param integer $index the index of the cell in the rowrow
+     * @param integer $index the index of the cell in the row
+     * @param RenderingOptions $renderingOptions the rendering options associated with this rendering
+     * @param integer offsetX the number of chars written on the line before this cell
+     *
+     * @return integer the number of chars written by this cell;
      */
-    private function renderCell($row, $index)
+    private function renderCell($row, $index, RenderingOptions $renderingOptions, $offsetX = 0)
     {
-        echo $row[$index];
-        echo str_repeat(' ', ($this->columnSizes[$index] - mb_strwidth($row[$index])));
-        if ($index < $this->numberOfColumns - 1) {
-            echo ' |';
+        if ($offsetX >= $renderingOptions->getScreenEstate()['x']) {
+            return 0;
         }
+
+        if ($renderingOptions->getScreenEstate()['x'] - 2 < $offsetX + $this->columnSizes[$index]) {
+            $padding = $renderingOptions->getScreenEstate()['x'] - $offsetX - 2 - mb_strwidth($row[$index]);
+            $overflowRight = true;
+        } else {
+            $padding = $this->columnSizes[$index] - mb_strwidth($row[$index]);
+            $overflowRight = false;
+        }
+        $cell = $overflowRight ?
+            mb_substr($row[$index], 0, $renderingOptions->getScreenEstate()['x'] - $offsetX - 2) :
+            $row[$index];
+        if ($padding > 0) {
+            $cell .= str_repeat(' ', $padding);
+        }
+        if ($index < $this->numberOfColumns - 1 && !$overflowRight) {
+            $cell .= ' |';
+        }
+        else if ($overflowRight) {
+            $cell .= " $this->moreRightRowsSymbol";
+        }
+        echo $cell;
+        return mb_strwidth($cell);
     }
 
     /**
      * Render the table headers
      *
-     * @param integer $offset the offset headers are requested to render at
      * @param array $columns an array of header column indexes to render
+     * @param RenderingOptions $renderingOptions the rendering options associated with this rendering
      */
-    private function renderHeaders($offset, $columns)
+    private function renderHeaders($columns, RenderingOptions $renderingOptions)
     {
-        if ($this->hasMoreRowsOnLeft($offset) > 0) {
+        $offsetX = 0;
+        if ($this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset()) > 0) {
             echo $this->moreLeftRowsSymbol;
+            $offsetX += 1;
         }
         foreach($columns as $i) {
             if (array_key_exists($i, $this->headers)) {
-                if ($i > 0 || $this->hasMoreRowsOnLeft($offset)) {
+                if (($i > 0 || $this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset()))
+                    && $offsetX < $renderingOptions->getScreenEstate()['x']) {
                     echo ' ';
+                    $offsetX += 1;
                 }
-                $this->renderCell($this->headers, $i);
+                $offsetX += $this->renderCell($this->headers, $i, $renderingOptions, $offsetX);
             }
         }
         echo PHP_EOL;
-        if ($this->hasMoreRowsOnLeft($offset) > 0) {
+        if ($this->hasMoreRowsOnLeft($renderingOptions->getColumnOffset()) > 0) {
             echo "$this->moreLeftRowsSymbol ";
         }
+        $offsetX = 0;
         foreach($columns as $i) {
+            if ($offsetX >= $renderingOptions->getScreenEstate()['x']) {
+                continue;
+            }
             if ($i > 0) {
                 echo '-';
+                $offsetX += 1;
             }
-            echo str_repeat('-', $this->columnSizes[$i] + ($i < $this->numberOfColumns - 1 ? 1 : 0));
-            if ($i < $this->numberOfColumns - 1) {
-                echo '+';
+            $lineLength = min($renderingOptions->getScreenEstate()['x'] - $offsetX - 2, $this->columnSizes[$i] + ($i < $this->numberOfColumns - 1 ? 1 : 0));
+            if ($lineLength > 0) {
+                echo str_repeat('-', $lineLength);
+                $offsetX += $lineLength;
+
+                if ($i < $this->numberOfColumns - 1 && $offsetX < $renderingOptions->getScreenEstate()['x'] - 2) {
+                    echo '+';
+                    $offsetX += 1;
+                }
+            }
+            if ($offsetX >= $renderingOptions->getScreenEstate()['x'] - 2) {
+                echo " $this->moreRightRowsSymbol";
+                $offsetX += 2;
             }
         }
         echo PHP_EOL;
