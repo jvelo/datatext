@@ -12,6 +12,12 @@ namespace Jvelo\Datatext\Models;
 use Illuminate\Database\Capsule\Manager as DB;
 use Jvelo\Datatext\Database\AbstractDatabaseTest;
 
+/**
+ * Class ObjectTest
+ * @package Jvelo\Datatext\Models
+ *
+ * @group models
+ */
 class ObjectTest extends AbstractDatabaseTest
 {
 
@@ -30,9 +36,16 @@ class ObjectTest extends AbstractDatabaseTest
 
         $this->assertEquals(1, Object::count());
 
+        $this->assertEquals(1, ObjectRevision::count());
+
         $fetched = Object::first();
 
         $this->assertEquals($fetched->data, '{}');
+
+        $fetched->setJsonAttribute('metadata', 'modified', 'true');
+        $fetched->save();
+
+        $this->assertEquals(2, ObjectRevision::count());
 
         $data = new Object;
         $data->type = 'blog-post';

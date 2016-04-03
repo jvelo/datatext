@@ -60,6 +60,21 @@ class CreatePageAndObjectTables extends Migration
         DB::statement("CREATE INDEX object_data_gin_index ON object USING GIN (data jsonb_path_ops);");
         DB::statement("CREATE INDEX object_type_index ON object USING BTREE (type)");
         DB::statement("CREATE INDEX object_metadata_created_at_index ON object (CAST (metadata->>'created_at' AS integer))");
+
+        // Objects revisions
+
+        DB::statement("CREATE TABLE object_revision (
+          object_id uuid REFERENCES object(id),
+          revision_id integer NOT NULL,
+          data_patch text NOT NULL,
+          metadata_patch text NOT NULL,
+          created_at timestamp without time zone NOT NULL,
+          author text NOT NULL,
+          PRIMARY KEY(object_id, revision_id)
+        );");
+
+        DB::statement("CREATE INDEX object_revision_author_index ON object_revision USING btree (author);");
+        DB::statement("CREATE INDEX object_revision_date_index ON object_revision USING btree (created_at);");
     }
 
     /**
@@ -69,6 +84,7 @@ class CreatePageAndObjectTables extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('object_revision');
         Schema::dropIfExists('object');
         Schema::dropIfExists('page_revision');
         Schema::dropIfExists('page');

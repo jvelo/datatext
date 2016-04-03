@@ -44,21 +44,21 @@ class Page extends Model {
     public function __construct()
     {
         parent::__construct();
-        $this->hintJsonStructure('metadata', '{"title":null, "author": null, "tags" : []}');
+        $this->hintJsonStructure('metadata', '{"title":null, "author": null, "tags" : [], "slug": null}');
         $this->metadata = '{}';
     }
 
-     public function getHtmlContentAttribute()
-     {
-         if (!isset($this->parser)) {
-             $this->parser = new Markdown();
-         }
+    public function getHtmlContentAttribute()
+    {
+        if (!isset($this->parser)) {
+            $this->parser = new Markdown();
+        }
 
-         $html = Shortcodes::process($this->attributes['content']);
-         $html =$this->parser->text($html);
+        $html = Shortcodes::process($this->attributes['content']);
+        $html =$this->parser->text($html);
 
-         return $html;
-     }
+        return $html;
+    }
 
     /**
      * Ensure the save is being done in a transaction so that pages are always consistent with their revisions (saved
@@ -82,12 +82,14 @@ class Page extends Model {
 
         static::creating(function($page)
         {
+            $slugifier = new Slugify();
             $page->setJsonAttribute('metadata', 'author', UserProvider::getCurrentUserId());
+            $page->setJsonAttribute('metadata', 'slug', $slugifier->slugify($page->title));
         });
 
         static::created(function($page)
         {
-            $revision = new Revision;
+            $revision = new PageRevision;
             $revision->page_id = $page->id;
             $revision->revision_id = 0;
 
@@ -110,9 +112,9 @@ class Page extends Model {
             // Get the page again from DB so we are sure we have up-to-date content to make the diff from
             $page = Page::find($updatingPage->id);
 
-            $lastRevision = Revision::where('page_id', $page->id)->orderBy('revision_id','DESC')->firstOrFail();
+            $lastRevision = PageRevision::where('page_id', $page->id)->orderBy('revision_id','DESC')->firstOrFail();
 
-            $revision = new Revision;
+            $revision = new PageRevision;
             $revision->page_id = $page->id;
             $revision->revision_id = $lastRevision->revision_id + 1;
 

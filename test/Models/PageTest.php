@@ -14,6 +14,12 @@ use Jvelo\Datatext\Support\Shortcodes;
 use Jvelo\Datatext\Shortcodes\Identity;
 use Jvelo\Datatext\Database\AbstractDatabaseTest;
 
+/**
+ * Class PageTest
+ * @package Jvelo\Datatext\Models
+ *
+ * @group models
+ */
 class PageTest extends AbstractDatabaseTest {
 
     public function testCreatePage() {
@@ -27,8 +33,8 @@ class PageTest extends AbstractDatabaseTest {
         $this->assertEquals(1, Page::count());
         $fetchedPage = Page::first();
 
-        $this->assertEquals(1, Revision::count());
-        $fetchedRevision = Revision::first();
+        $this->assertEquals(1, PageRevision::count());
+        $fetchedRevision = PageRevision::first();
 
         $array = $fetchedRevision->attributesToArray();
         $this->logger->info("Attributes", $array);
@@ -61,8 +67,8 @@ class PageTest extends AbstractDatabaseTest {
         $this->assertEquals(1, Page::count());
         $fetchedPage = Page::first();
 
-        $this->assertEquals(2, Revision::count());
-        $fetchedRevision = Revision::orderBy('revision_id', 'DESC')->first();
+        $this->assertEquals(2, PageRevision::count());
+        $fetchedRevision = PageRevision::orderBy('revision_id', 'DESC')->first();
 
         $array = $fetchedRevision->attributesToArray();
         $this->logger->info("Attributes", $array);
